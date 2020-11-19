@@ -5,11 +5,10 @@
     </div>
     <div class="content">
       <div>
-        <h1 class="title">Choose your dream destination...</h1>
         <div class="links">
-          <nuxt-link :to="'/tickets?locationCode=' + dest.code" class="giant-button" :key="dest.code" v-for="dest in computedDreamDestinations">
-            {{ dest.name }}
-          </nuxt-link>
+          <div>
+            <div class="ticket" v-for="ticket in computedTickets" :key="ticket.seat"> {{ ticket.passenger}}'s ticket for flight {{ ticket.flight }} from {{ ticket.from }} to {{ ticket.to }} </div>
+          </div>
         </div>
       </div>
     </div>
@@ -19,12 +18,14 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'Index',
+  name: 'Tickets',
   computed: mapGetters({
-    computedDreamDestinations: 'index/getDreamDestinations'
+    computedTickets: 'index/getTickets'
   }),
   mounted () {
-    this.$store.dispatch('index/getDreamDestinationsFromApi')
+    // Récupération des tickets à partir du querystring
+    const lsLocationCode = this.$route.query.locationCode
+    this.$store.dispatch('index/getTicketsForLocationCode', lsLocationCode)
   }
 }
 </script>
@@ -72,5 +73,13 @@ export default {
   & > * {
     margin: 5px;
   }
+}
+
+.ticket {
+  margin: 50px;
+  border: 2px solid grey;
+  color: black;
+  background-color: white;
+  padding: 25px;
 }
 </style>

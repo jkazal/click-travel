@@ -2,5 +2,8 @@
 export default {
   getDreamDestinations (state) {
     return state.dreamDestinations
+  },
+  getTickets (state) {
+    return state.tickets
   }
 }
