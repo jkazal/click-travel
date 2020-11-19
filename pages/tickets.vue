@@ -7,9 +7,20 @@
       <div>
         <div class="links">
           <div>
-            <div class="ticket" v-for="ticket in computedTickets" :key="ticket.seat"> {{ ticket.passenger}}'s ticket for flight {{ ticket.flight }} from {{ ticket.from }} to {{ ticket.to }} </div>
+            <button v-on:click="loadTicketIntoData(ticket)" class="ticket" v-for="ticket in computedTickets" :key="ticket.to"> {{ ticket.passenger}}'s ticket for flight {{ ticket.flight }} from {{ ticket.from }} to {{ ticket.to }} </button>
           </div>
         </div>
+        <boarding-ticket
+            v-if="isTicketSelected"
+            :passenger="selectedTicket.passenger"
+            :flight="selectedTicket.flight"
+            :from="selectedTicket.from"
+            :destination="selectedTicket.destination"
+            :flightClass="selectedTicket.flightClass"
+            :gate="selectedTicket.gate"
+            :time="selectedTicket.time"
+            :seat="selectedTicket.seat"
+            :number="selectedTicket.number" />
       </div>
     </div>
   </div>
@@ -17,8 +28,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import BoardingTicket from '~/components/BoardingTicket.vue'
 export default {
+  components: { BoardingTicket },
   name: 'Tickets',
+  data () {
+    return {
+      isTicketSelected: false,
+      selectedTicket: {}
+    }
+  },
   computed: mapGetters({
     computedTickets: 'index/getTickets'
   }),
@@ -26,6 +45,22 @@ export default {
     // Récupération des tickets à partir du querystring
     const lsLocationCode = this.$route.query.locationCode
     this.$store.dispatch('index/getTicketsForLocationCode', lsLocationCode)
+  },
+  methods: {
+    loadTicketIntoData (asTicket) {
+      this.isTicketSelected = true
+      this.selectedTicket = {
+        passenger: asTicket.passenger,
+        flight: asTicket.flight,
+        from: asTicket.from,
+        destination: asTicket.to,
+        flightClass: asTicket.class,
+        gate: asTicket.gate,
+        time: asTicket.time,
+        seat: asTicket.seat,
+        number: asTicket.number
+      }
+    }
   }
 }
 </script>
