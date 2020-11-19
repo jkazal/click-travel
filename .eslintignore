@@ -1,0 +1,9 @@
+node_modules/**
+config/**
+middleware/**
+plugins/**
+static/**
+**/*.md
+**/*.ico
+**/*.json
+api/**
